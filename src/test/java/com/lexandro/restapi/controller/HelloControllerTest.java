@@ -35,8 +35,18 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void shouldHelloGreetsWithName() throws Exception {
+    public void shouldHelloWorldGreetsWithGivenName() throws Exception {
         mockMvc.perform(get("/hello/lexandro").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").value("Hello lexandro"))
+                .andReturn();
+    }
+
+    @Test
+    public void shouldHelloGreetsWithGivenNameAs() throws Exception {
+        mockMvc.perform(get("/hello?name=lexandro").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
