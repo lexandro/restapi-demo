@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -35,7 +36,7 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void shouldHelloWorldGreetsWithGivenName() throws Exception {
+    public void shouldHelloWorldGreetsWithParamValueName() throws Exception {
         mockMvc.perform(get("/hello/lexandro").contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
@@ -45,8 +46,19 @@ public class HelloControllerTest {
     }
 
     @Test
-    public void shouldHelloGreetsWithGivenNameAs() throws Exception {
+    public void shouldHelloWorldGreetsWithGivenRequestParamName() throws Exception {
         mockMvc.perform(get("/hello?name=lexandro").contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.message").exists())
+                .andExpect(jsonPath("$.message").value("Hello lexandro"))
+                .andReturn();
+    }
+
+    @Test
+    public void shouldHelloWorldGreetsWithPostedBodyName() throws Exception {
+        String jsonMessage = "lexandro";
+        mockMvc.perform(post("/hello").contentType(MediaType.APPLICATION_JSON).content(jsonMessage.getBytes()))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())

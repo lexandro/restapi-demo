@@ -26,6 +26,12 @@ public class HelloController {
     }
 
 
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    private ResponseEntity<HelloOutput> helloWorldPostName(@RequestBody String name) {
+        HelloOutput resultMessage = new HelloOutput();
+        resultMessage.setMessage("Hello " + name);
+        return new ResponseEntity<>(resultMessage, OK);
+    }
 
 
 }
