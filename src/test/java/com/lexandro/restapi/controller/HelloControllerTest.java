@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class HelloControllerTest {
 
+    public static final String DEMO_NAME = "lexandro";
     @Autowired
     private WebApplicationContext context;
     //
@@ -37,17 +38,17 @@ public class HelloControllerTest {
 
     @Test
     public void shouldHelloWorldGreetsWithParamValueName() throws Exception {
-        mockMvc.perform(get("/hello/lexandro").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/hello/" + DEMO_NAME).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
-                .andExpect(jsonPath("$.message").value("Hello lexandro"))
+                .andExpect(jsonPath("$.message").value("Hello " + DEMO_NAME))
                 .andReturn();
     }
 
     @Test
-    public void shouldHelloWorldGreetsWithGivenRequestParamName() throws Exception {
-        mockMvc.perform(get("/hello?name=lexandro").contentType(MediaType.APPLICATION_JSON))
+    public void shouldHelloWorldGreetsWithRequestParamName() throws Exception {
+        mockMvc.perform(get("/hello?name=" + DEMO_NAME).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
@@ -57,12 +58,12 @@ public class HelloControllerTest {
 
     @Test
     public void shouldHelloWorldGreetsWithPostedBodyName() throws Exception {
-        String jsonMessage = "lexandro";
+        String jsonMessage = DEMO_NAME;
         mockMvc.perform(post("/hello").contentType(MediaType.APPLICATION_JSON).content(jsonMessage.getBytes()))
                 .andDo(print())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.message").exists())
-                .andExpect(jsonPath("$.message").value("Hello lexandro"))
+                .andExpect(jsonPath("$.message").value("Hello " + DEMO_NAME))
                 .andReturn();
     }
 }
